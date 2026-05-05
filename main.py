@@ -99,7 +99,6 @@ def detectar_figura(c):
         for i in range(4):
             x1, y1 = pts[i]
             x2, y2 = pts[(i+1)%4]
-
             dx = x2 - x1
             dy = y2 - y1
 
