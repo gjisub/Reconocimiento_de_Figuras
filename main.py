@@ -5,9 +5,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import os
 
-# ==============================
-# SELECTOR DE IMAGEN
-# ==============================
+#imagen
 Tk().withdraw()
 
 carpeta = os.path.join(os.getcwd(), "imagenes")
@@ -31,9 +29,7 @@ if imagen is None:
 imagen = cv2.resize(imagen, (1000, 500))
 resultado = imagen.copy()
 
-# ==============================
-# PREPROCESAMIENTO
-# ==============================
+#desarrollo
 gray = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (5,5), 0)
 
@@ -46,9 +42,7 @@ contornos, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMP
 
 imagenHSV = cv2.cvtColor(imagen, cv2.COLOR_BGR2HSV)
 
-# ==============================
-# FUNCIONES
-# ==============================
+#todas las funciones
 def detectar_color(mask):
     # Extraer solo los píxeles de la figura
     h_values = imagenHSV[:,:,0][mask == 255]
@@ -56,7 +50,7 @@ def detectar_color(mask):
     if len(h_values) == 0:
         return "Otro"
 
-    # Obtener el valor más frecuente (modo)
+    #valor mas llamativo
     hist = np.bincount(h_values)
     h = np.argmax(hist)
 
@@ -65,7 +59,7 @@ def detectar_color(mask):
         return "Rojo"
     elif 10 <= h < 20:
         return "Naranja"
-    elif 20 <= h < 40:   # 👈 amarillo bien amplio
+    elif 20 <= h < 40:   
         return "Amarillo"
     elif 40 <= h < 85:
         return "Verde"
@@ -87,11 +81,9 @@ def detectar_figura(c):
 
     lados = len(approx)
 
-    # ===== TRIÁNGULO =====
     if lados == 3:
         return "Triangulo"
 
-    # ===== CUADRILÁTEROS =====
     elif lados == 4:
         pts = approx.reshape(4,2)
 
@@ -118,9 +110,8 @@ def detectar_figura(c):
             else:
                 return "Rectangulo"
         else:
-            return "Rombo"
+            return "Rombo"                                     
 
-    # ===== OTRAS FIGURAS =====
     elif lados == 5:
         return "Pentagono"
 
@@ -130,9 +121,7 @@ def detectar_figura(c):
     else:
         return "Circulo"
 
-# ==============================
-# PROCESAMIENTO
-# ==============================
+#contador de las figurass
 contador = {}
 
 for c in contornos:
@@ -161,9 +150,7 @@ for c in contornos:
     cv2.putText(resultado, clave, (cx-60, cy),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
 
-# ==============================
-# RESULTADOS
-# ==============================
+#resultado
 print("\n===== RESULTADO =====")
 for k, v in contador.items():
     print(f"{v} {k}")
